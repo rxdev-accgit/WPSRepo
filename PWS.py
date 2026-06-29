@@ -24,32 +24,33 @@ shop_id         = 0
 def generate_shop():
     global current_shop, last_reset_time, shop_id
 
-    pool = []
-    for name, data in ITEMS.items():
-        for _ in range(data["weight"]):
-            pool.append(name)
-
-    random.shuffle(pool)
+    items = list(ITEMS.items())
     chosen = {}
-    seen   = set()
 
-    for pick in pool:
-        if len(chosen) >= MAX_ITEMS:
-            break
-        if pick not in seen:
-            seen.add(pick)
-            chosen[pick] = {
-                "stock": ITEMS[pick]["stock"],
-                "price": ITEMS[pick]["price"],
-            }
+    available = items.copy()
+
+    for _ in range(min(MAX_ITEMS, len(items))):
+        total_weight = sum(item[1]["weight"] for item in available)
+
+        r = random.uniform(0, total_weight)
+        upto = 0
+
+        for i, (name, data) in enumerate(available):
+            upto += data["weight"]
+            if r <= upto:
+                chosen[name] = {
+                    "stock": data["stock"],
+                    "price": data["price"],
+                }
+                available.pop(i)
+                break
 
     with shop_lock:
-        current_shop    = chosen
+        current_shop = chosen
         last_reset_time = int(time.time())
-        shop_id        += 1
+        shop_id += 1
 
-    print(f"[SHOP]: Generated new shop (ID {shop_id}) — {list(chosen.keys())}")
-
+    print(f"[SHOP]: Generated shop — {list(chosen.keys())}")
 
 def reset_loop():
     while True:
