@@ -9,10 +9,10 @@ RESET_INTERVAL = 5 * 60
 MAX_ITEMS      = 3
 
 ITEMS = {
-    "Item 1": { "weight": 30, "stock": 20, "price": 100 },
-    "Item 2": { "weight": 20, "stock": 10, "price": 200 },
-    "Item 3": { "weight": 10, "stock": 5,  "price": 300 },
-    "Super Rare Item 4": { "weight": 3,  "stock": 1,  "price": 400 },
+    "Sword": { "weight": 30, "stock": 20, "price": 100 }, #example item name
+    "Apple": { "weight": 20, "stock": 10, "price": 200 }, #example item name
+    "Potion": { "weight": 10, "stock": 5,  "price": 300 }, #example item name
+    "Super crystal": { "weight": 3,  "stock": 1,  "price": 400 }, #example item name
 }
 
 shop_lock       = threading.Lock()
